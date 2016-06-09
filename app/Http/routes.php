@@ -11,10 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [
+		'as' => 'home', 
+		'uses' => 'HomeController@index']
+);
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/dashboard', [
+		'as' => 'dashboard', 
+		'uses' => 'DashboardController@index']
+);
+
+Route::resource('booklist', 'BooklistController');

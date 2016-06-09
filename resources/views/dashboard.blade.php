@@ -5,10 +5,13 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+                <div class="panel-heading">Dashboard - My Books</div>
 
                 <div class="panel-body">
                     You are logged in!
+                    @if ( $userdata['booklists']->isEmpty() )
+                    	<a href="/booklist/create">Add a reading list</a> to get started.	
+                    @endif
                 </div>
             </div>
         </div>

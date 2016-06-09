@@ -23,4 +23,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    /**
+     * Get the booklists for this user
+     */
+    public function booklists()
+    {
+    	return $this->hasMany('App\Booklist');
+    }
 }
