@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\BookList;
+use App\Book;
 use Doctrine\Common\Collections\Collection;
 
 class BooklistController extends Controller

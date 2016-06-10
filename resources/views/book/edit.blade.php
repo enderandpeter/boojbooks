@@ -48,7 +48,7 @@
                 			<div class="form-group">
 		                		<label for="{{ $attribute }}">{{ App\Book::splitWords($attribute) }}</label>
 		                		@if ( $input === 'textarea' )
-		                			<textarea type="text"{{ $attributes }}>{{ old('description') }}</textarea>
+		                			<textarea type="text"{{ $attributes }}>{{ old('description') ? old('description') : $book->description }}</textarea>
 		                		@else
 		                			<input type="{{ $inputType }}"{{ $attributes }} value="{{ old($attribute) ? old($attribute) : $book->$attribute }}">
 		                		@endif		    					

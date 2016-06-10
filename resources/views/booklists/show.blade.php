@@ -22,7 +22,12 @@
                 			@foreach ( $booklist->books as $book )
                 				@foreach ( $displayableAttributes as $attribute )
                 				<td id="book_{{ $attribute }}_{{ $book->id }}">
-                					{{ $book->$attribute }} 
+                					@if ( $attribute === 'title' )
+                						<a href="{{ route('booklist.book.show', [ $booklist->id, $book->id ]) }}">{{ $book->$attribute }}</a>
+                					@else
+                						{{ $book->$attribute }}
+                					@endif
+                					 
                 				</td>
                 				@endforeach
                 				<td id="book_controls_{{ $book->id }}">
@@ -49,7 +54,7 @@
                 	<ul class="list-group booklist" id="booklist_{{ $booklist->id }}">
                 		@foreach ( $booklist->books as $book )
                 			<li class="list-group-item">
-                				<h2 class="book_title" id="book_title_{{ $book->id }}">{{ $book->title }}</h2>
+                				<a href="{{ route('booklist.book.show', [ $booklist->id, $book->id ]) }}"><h2 class="book_title" id="book_title_{{ $book->id }}">{{ $book->title }}</h2></a>
                 				<h3 class="book_author" id="book_author_{{ $book->id }}">{{ $book->author }}</h3>
                 				<h4 class="book_publication_date" id="book_publication_date_{{ $book->id }}">{{ $book->publication_date }}</h4>
                 				<div class="book_description" id="book_description_{{ $book->id }}">
