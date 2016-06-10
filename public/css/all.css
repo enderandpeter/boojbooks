@@ -19,3 +19,7 @@ body {
 .panel-default > .panel-heading {
 	background-color: #FFEAEB;
 }
+
+#image {
+    padding-bottom: 3em;
+}

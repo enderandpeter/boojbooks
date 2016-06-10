@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use League\Flysystem\Filesystem;
+
 use App\Book;
 use App\Booklist;
 
@@ -30,14 +33,14 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {    	
     	$this->validate($request, [
     			'title' => 'required|max:255|string',
     			'author' => 'required|max:255|string',
-    			'publication_date' => 'date',
+    			'publication_date' => 'required|date',
     			'description' => 'string|max:1000',
     			'rating' => 'numeric|max:5',
-    			'image' => 'image|dimensions:min_width=1000,min_height=1000'
+    			'image' => 'image|dimensions:min_width=5,min_height=5,max_width=1000,max_height=1000'
     	]);
     	
     	$booklistid = $request->route('booklist');
@@ -49,9 +52,12 @@ class BookController extends Controller
     	
     	$book = Book::create($createData);
     	
-    	$book->setImage($request->file('image')->getRealPath());
+    	if($request->hasFile('image')){
+    		
+    		$book->setImage($request->file('image')->getRealPath());
+    	}
     	
-    	return back()->with('status', [ 'message' => $message ]);
+    	return redirect( route('booklist.book.create', $booklist->id ) )->with('status', [ 'message' => $message ]);
     }
 
     /**

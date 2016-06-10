@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use Storage;
+use SplFileInfo;
 
 class Book extends Model
 {
@@ -14,7 +15,7 @@ class Book extends Model
 	 * @var array
 	 */
 	protected $fillable = [
-		'title', 'author', 'publication_date', 'description', 'rating', 'image_ext'
+		'title', 'author', 'publication_date', 'description', 'rating', 'image_ext', 'booklist_id'
 	];
 	
 	/**
