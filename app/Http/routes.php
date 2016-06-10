@@ -24,3 +24,8 @@ Route::get('/dashboard', [
 );
 
 Route::resource('booklist', 'BooklistController');
+
+Route::resource('booklist.book', 'BookController', [
+		'parameters' => 'singular',
+		'except' => [ 'index' ]
+]);

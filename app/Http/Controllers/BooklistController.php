@@ -15,7 +15,7 @@ class BooklistController extends Controller
      */
     public function index()
     {
-        //
+    	return view('dashboard');
     }
 
     /**
@@ -40,7 +40,7 @@ class BooklistController extends Controller
         	'name' => 'required|max:255'
         ]);
         
-        $message = "Reading List <strong>{$request->name}</strong> was created!";
+        $message = "Reading List {$request->name} was created!";
         
         $createData = [
         	'name' => $request->input('name'),
@@ -49,7 +49,7 @@ class BooklistController extends Controller
         
         BookList::create($createData);
         
-        return redirect('/')->with('message', $message);
+        return redirect('/')->with('status', [ 'message' => $message ]);
     }
 
     /**
@@ -60,7 +60,9 @@ class BooklistController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('booklists.show', [
+        	'booklist' => Booklist::findorFail($id)->first()
+        ]);
     }
 
     /**
@@ -71,7 +73,9 @@ class BooklistController extends Controller
      */
     public function edit($id)
     {
-        //
+    	return view('booklists.edit', [
+    		'booklist' => Booklist::findorFail($id)->first()
+    	]);
     }
 
     /**
@@ -83,7 +87,19 @@ class BooklistController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+    	$this->validate($request, [
+    			'name' => 'required|max:255'
+    	]);
+    	
+    	$booklist = Booklist::findOrFail($id)->first();
+    	
+    	$message = "Reading List {$booklist->name} was updated!";
+    	
+    	$booklist->name = $request->input('name');
+    	
+    	$booklist->save();
+    	
+    	return redirect( route( 'booklist.show', $id ) )->with('status', [ 'message' => $message ]);
     }
 
     /**
@@ -94,6 +110,15 @@ class BooklistController extends Controller
      */
     public function destroy($id)
     {
-        //
+    	$booklist = Booklist::findOrFail($id)->first();
+    	
+    	$message = "Reading List {$booklist->name} was deleted!";        
+        
+        $booklist->delete();
+        
+        return redirect('/')->with('status', [ 
+        		'message' => $message, 
+        		'type' => 'warning'
+        ]);
     }
 }

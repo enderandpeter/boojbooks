@@ -19,3 +19,23 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Booklist::class, function (Faker\Generator $faker) {
+	return [
+		'name' => $faker->name,
+		'user_id' => factory(App\User::class)->create()->id
+	];
+});
+
+$factory->define(App\Book::class, function (Faker\Generator $faker) {
+	return [
+			'title' => $faker->name,
+			'booklist_id' => factory(App\Booklist::class)->create(
+					[ 'user_id' => factory(App\User::class)->create()->id ]
+			 )->id,
+			'author' => $faker->name,
+			'publication_date' => $faker->date(),
+			'description' => $faker->realText(),
+			'rating' => $faker->randomFloat(1, 0, 5)
+	];
+});

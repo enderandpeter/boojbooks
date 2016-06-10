@@ -84,9 +84,14 @@
 	    </div>
 	@endif
 	
-	@if ( session('message') )
-		<div class="alert alert-success">
-			{{ session('message') }}
+	@if ( session('status') )
+		@if ( session('status.type') )
+			<?php $alertClass = session('status.type'); ?>
+		@else
+			<?php $alertClass = 'success'; ?>
+		@endif
+		<div class="alert alert-{{ $alertClass }}">
+			{{ session('status.message') }}
 		</div>
 	@endif
 	

@@ -15,8 +15,25 @@ Please use the [ORM](https://laravel.com/docs/5.2/eloquent) rather than crafting
 * Handle image uploading while adding books to the list
 * Do something fancy like integrating an external API or handling user authentication
 
+<hr />
+
 ## Instructions
 
 ### Usage
 
 Go to the __Register__ link to create an account, after which you will be able to create reading lists.
+
+### Deploying
+
+You can deploy this Laravel site in an environment with all the required programs and credentials, which you may
+specify for the database in the local `.env`. 
+
+## Requirements
+
+* Laravel 5.2.*
+* PHP >=5.5.9
+* MySQL 5.*
+
+### Recommended
+* [doctrine/dbal](https://packagist.org/packages/doctrine/dbal) 2.*
+* [Docker](https://www.docker.com/products/docker-toolbox)
