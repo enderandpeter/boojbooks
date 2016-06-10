@@ -19,6 +19,7 @@ class CreateBooksTable extends Migration
             $table->date('publication_date')->comment('The publication date of this book');
             $table->text('description')->comment('A description of the book');
             $table->decimal('rating', 2, 1)->comment('A rating for the book between 1 and 5');
+            $table->string('image_ext', 5)->comment('The extension of the uploaded image. It will be retrieved from file storage');
             $table->timestamps();
             
             /*

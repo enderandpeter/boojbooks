@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Book;
+use App\Booklist;
 
 class BookController extends Controller
 {
@@ -13,9 +14,13 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-         return view('book.create');
+    	$booklist = Booklist::findOrFail( $request->route('booklist') )->first(); 
+    	
+        return view('book.create', [
+         	'booklist'	=> $booklist
+        ]);
     }
 
     /**
@@ -31,17 +36,20 @@ class BookController extends Controller
     			'author' => 'required|max:255|string',
     			'publication_date' => 'date',
     			'description' => 'string|max:1000',
-    			'rating' => 'numeric|max:5'
+    			'rating' => 'numeric|max:5',
+    			'image' => 'image|dimensions:min_width=1000,min_height=1000'
     	]);
     	
     	$booklistid = $request->route('booklist');
-    	$booklist = Booklist::findOrFail($booklistid)->get();
+    	$booklist = Booklist::findOrFail($booklistid)->first();
     	
     	$message = "Added {$request->title} to Reading List {$booklist->name}!";
     	
-    	$createData = array_merge($request->all(), [ 'booklist_id' => $booklistid ]);
+    	$createData = array_merge($request->all(), [ 'booklist_id' => $booklist->id ]);
     	
-    	BookController::create($createData);
+    	$book = Book::create($createData);
+    	
+    	$book->setImage($request->file('image')->getRealPath());
     	
     	return back()->with('status', [ 'message' => $message ]);
     }

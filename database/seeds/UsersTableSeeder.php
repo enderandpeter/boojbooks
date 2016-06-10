@@ -19,6 +19,11 @@ class UsersTableSeeder extends Seeder
     			'email' => 'williamcwilliams@gmail.com',
     			'password' => Hash::make('mypass')]);
     	
+    	/*
+    	 * Create image folder for users
+    	 */
+    	Storage::makeDirectory('images');
+    	
     	$this->command->info('Users table is ready!');
     }
 }
