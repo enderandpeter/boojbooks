@@ -19,10 +19,28 @@ class Book extends Model
 	];
 	
 	/**
+	 * An array of Book attributes that are suitable for most views
+	 * 
+	 * @return array
+	 */
+	public function getDisplayable(){
+		return array_diff($this->fillable, ['image_ext', 'booklist_id']);
+	}
+	
+	/**
+	 * Split a snake case word into first-letter uppercased, space-delimited words
+	 * 
+	 * @param string $word
+	 */
+	public static function splitWords($word = ''){
+		return ucwords( str_replace( '_', ' ', $word ) );
+	}
+	
+	/**
 	 * Save the uploaded image
 	 *
 	 * @param string $realpath The real server path to the uploaded file
-	 * @param string $clientpath The client-provided path to the file which contains the origain file extension 
+	 * @param string $clientpath The client-provided path to the file which contains the original file extension 
 	 */
 	public function setImage($realpath = '', $clientpath = ''){
 		// Only proceed if given actual file paths.

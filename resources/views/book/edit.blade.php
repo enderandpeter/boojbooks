@@ -5,9 +5,9 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading"> Add a book to <strong>{{ $booklist->name }}</strong> </div>
+                <div class="panel-heading"> Edit <strong>{{ $book->title }}</strong> </div>
                 <div class="panel-body">
-                	<form enctype="multipart/form-data" id="store_book_booklist_{{ $booklist->id }}" action="{{ route( 'booklist.book.store', $booklist->id ) }}" method="post">
+                	<form enctype="multipart/form-data" id="update_book_booklist_{{ $booklist->id }}" action="{{ route( 'booklist.book.update', [ $booklist->id, $book->id ] ) }}" method="post">
                 		@foreach ($displayAttributes as $attribute) 
 	                		<?php 
 	                			$inputType = 'text';
@@ -50,7 +50,7 @@
 		                		@if ( $input === 'textarea' )
 		                			<textarea type="text"{{ $attributes }}>{{ old('description') }}</textarea>
 		                		@else
-		                			<input type="{{ $inputType }}"{{ $attributes }}>
+		                			<input type="{{ $inputType }}"{{ $attributes }} value="{{ old($attribute) ? old($attribute) : $book->$attribute }}">
 		                		@endif		    					
     						</div>                			
                 		@endforeach                		
@@ -58,8 +58,8 @@
     						<label for="image">Book Cover</label>
     						<input type="file" class="form-control" id="image" name="image" accept="image/*" value="{{ old('image') }}">
     					</div>		
-    					<button type="submit" name="submit" class="btn btn-default">Add book</button>
-                		
+    					<button type="submit" name="submit" class="btn btn-default">Edit book</button>
+                		{{ method_field('PUT') }}
                 		{{ csrf_field() }}
                 	</form>
                 </div>

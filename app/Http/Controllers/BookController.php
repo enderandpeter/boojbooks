@@ -7,10 +7,19 @@ use Illuminate\Http\Request;
 use App\Book;
 use App\Booklist;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 class BookController extends Controller
 {
+	/**
+	 * Instantiate a new BooklistController class
+	 *
+	 * @return void
+	 */
+	public function __construct(){
+		$this->middleware('auth', [ 'except' => [
+				'show'
+		]]);
+	}
+	
     /**
      * Show the form for creating a new resource.
      *
@@ -21,7 +30,9 @@ class BookController extends Controller
     	$booklist = Booklist::findOrFail( $request->route('booklist') )->first(); 
     	
         return view('book.create', [
-         	'booklist'	=> $booklist
+         	'booklist'	=> $booklist,
+        	'displayAttributes' => (new Book)->getDisplayable()
+        		
         ]);
     }
 
@@ -64,10 +75,11 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($booklistid, $bookid)
     {
         return view('book.show', [
-        	'book' => Book::findOrFail($id)->get()
+        	'booklist' => Booklist::findOrFail($booklistid)->first(), 
+        	'book' => Book::findOrFail($bookid)->first()
         ]);
     }
 
@@ -77,10 +89,12 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($booklistid, $bookid)
     {
         return view('book.edit', [
-        	'book' => Book::findOrFail($id)->get()
+        	'booklist' => Booklist::findOrFail($booklistid)->first(),
+        	'book' => Book::findOrFail($bookid)->first(),
+        	'displayAttributes' => (new Book)->getDisplayable()
         ]);
     }
 
@@ -91,7 +105,7 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $booklistid, $bookid)
     {
         $this->validate($request, [
     			'title' => 'required|max:255|string',
@@ -109,7 +123,7 @@ class BookController extends Controller
     	
     	$booklist->save($updateData);
     	
-    	return back()->with('status', [ 'message' => $message ]);
+    	return redirect( route('booklist.book.show', [ 'booklist' => $booklistid, 'book' => $bookid ]) )->with('status', [ 'message' => $message ]);
     }
 
     /**
@@ -118,15 +132,15 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($booklistid, $bookid)
     {
-        $booklist = Book::findOrFail($id);
+        $booklist = Book::findOrFail($bookid);
     	
     	$message = "{$book->title} was deleted!";        
         
         $booklist->delete();
         
-        return back()->with('status', [ 
+        return redirect( route('booklist.book.show', [ 'booklist' => $booklistid, 'book' => $bookid ]) )->with('status', [ 
         		'message' => $message, 
         		'type' => 'warning'
         ]);

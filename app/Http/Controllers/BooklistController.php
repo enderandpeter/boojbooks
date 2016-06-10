@@ -5,9 +5,41 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\BookList;
+use Doctrine\Common\Collections\Collection;
 
 class BooklistController extends Controller
 {
+	
+	/**
+	 * Instantiate a new BooklistController class
+	 * 
+	 * @return void
+	 */
+	public function __construct(){
+		$this->middleware('auth', [ 'except' => [
+			'show'	
+		]]);
+	}
+	
+	/**
+	 * Gets a book's displayable attributes
+	 * 
+	 * @param \Illuminate\Database\Eloquent\Collection $books The list of books 
+	 * @return array|null
+	 */
+	public function getDisplayableAttributes($books = null){
+		if(empty($books)){
+			
+		}
+		
+		$displayableAttributes = null;
+		
+		if( ! $books->isEmpty() ){
+    		$displayableAttributes = $books[0]->getDisplayable();
+    	}
+		return $displayableAttributes;
+	}
+	
     /**
      * Display a listing of the resource.
      *
@@ -60,8 +92,11 @@ class BooklistController extends Controller
      */
     public function show($id)
     {
+    	$booklist = Booklist::findorFail($id)->first();    	
+    	
         return view('booklists.show', [
-        	'booklist' => Booklist::findorFail($id)->first()
+        	'booklist' => $booklist,
+        	'displayableAttributes' => (new Book)->getDisplayable()
         ]);
     }
 
