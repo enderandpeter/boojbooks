@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use League\Flysystem\Filesystem;
-
 use App\Book;
 use App\Booklist;
+
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class BookController extends Controller
 {
@@ -53,11 +52,10 @@ class BookController extends Controller
     	$book = Book::create($createData);
     	
     	if($request->hasFile('image')){
-    		
-    		$book->setImage($request->file('image')->getRealPath());
+    		$book->setImage($request->file('image')->getRealPath(), $request->file('image')->getClientOriginalName());
     	}
     	
-    	return redirect( route('booklist.book.create', $booklist->id ) )->with('status', [ 'message' => $message ]);
+    	return redirect( route('booklist.show', $booklist->id ) )->with('status', [ 'message' => $message ]);
     }
 
     /**

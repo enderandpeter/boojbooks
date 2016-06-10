@@ -21,14 +21,20 @@ class Book extends Model
 	/**
 	 * Save the uploaded image
 	 *
-	 * @param string $realpath The real server path to the uploaded file 
+	 * @param string $realpath The real server path to the uploaded file
+	 * @param string $clientpath The client-provided path to the file which contains the origain file extension 
 	 */
-	public function setImage($realpath = ''){
-		$fileinfo = new SplFileInfo($realpath);
+	public function setImage($realpath = '', $clientpath = ''){
+		// Only proceed if given actual file paths.
+		if(empty($realpath) || empty($clientpath)){
+			return;
+		}
+		
+		$fileinfo = new SplFileInfo($clientpath);
 		$ext = $fileinfo->getExtension();
 		
 		$imagepath = "images/{$this->id}.$ext";
-		Storage::set($imagepath, file_get_contents($realpath));
+		Storage::put($imagepath, file_get_contents($realpath));
 		$this->image_ext = $ext;
 		$this->save();
 	}
