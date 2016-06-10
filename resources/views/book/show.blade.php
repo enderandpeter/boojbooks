@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading"> {{ $book->title }}</strong> </div>
+                <div class="panel-heading"> <a href="{{ route('booklist.show', $booklist->id) }}">{{ $booklist->name }}</a> - {{ $book->title }}</strong> </div>
                 <div class="panel-body">
                 	<div class="container-fluid">
                 		<div class="row">

@@ -93,7 +93,7 @@ class BooklistController extends Controller
      */
     public function show($id)
     {
-    	$booklist = Booklist::findorFail($id)->first();    	
+    	$booklist = Booklist::findorFail($id);    	
     	
         return view('booklists.show', [
         	'booklist' => $booklist,
@@ -110,7 +110,7 @@ class BooklistController extends Controller
     public function edit($id)
     {
     	return view('booklists.edit', [
-    		'booklist' => Booklist::findorFail($id)->first()
+    		'booklist' => Booklist::findorFail($id)
     	]);
     }
 
@@ -127,7 +127,7 @@ class BooklistController extends Controller
     			'name' => 'required|max:255'
     	]);
     	
-    	$booklist = Booklist::findOrFail($id)->first();
+    	$booklist = Booklist::findOrFail($id);
     	
     	$message = "Reading List {$booklist->name} was updated!";
     	
@@ -146,7 +146,7 @@ class BooklistController extends Controller
      */
     public function destroy($id)
     {
-    	$booklist = Booklist::findOrFail($id)->first();
+    	$booklist = Booklist::findOrFail($id);
     	
     	$message = "Reading List {$booklist->name} was deleted!";        
         

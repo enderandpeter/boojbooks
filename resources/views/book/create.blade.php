@@ -13,11 +13,12 @@
 	                			$inputType = 'text';
 	                			$input = 'input';
 	                			
-	                			$attributes = ' maxlength="255" ';
+	                			$attributes = ' required maxlength="255" ';
 	                		?>               			
                 			@if ( $attribute === 'publication_date' )
                 				<?php 
                 					$inputType = 'date';
+                					$attributes = ' required ';
                 				?>
                 			@endif
                 			
@@ -31,6 +32,7 @@
                 			@if ( $attribute === 'rating' )
                 				<?php 
                 					$inputType = 'number';
+                					$attributes = ' min=1 max=5 ';
                 				?>
                 			@endif
                 			
@@ -42,6 +44,7 @@
                 			
                 			<?php 
                 				$heading = App\Book::splitWords($attribute);
+                				
                 				$attributes .= " class=form-control id=$attribute name=$attribute placeholder=$heading";
                 			?>
                 			
@@ -50,7 +53,7 @@
 		                		@if ( $input === 'textarea' )
 		                			<textarea type="text"{{ $attributes }}>{{ old('description') }}</textarea>
 		                		@else
-		                			<input type="{{ $inputType }}"{{ $attributes }}>
+		                			<input type="{{ $inputType }}"{{ $attributes }} value="{{ old($attribute) }}">
 		                		@endif		    					
     						</div>                			
                 		@endforeach                		

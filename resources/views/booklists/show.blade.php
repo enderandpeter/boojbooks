@@ -7,19 +7,60 @@
             <div class="panel panel-default">
                 <div class="panel-heading"> {{ $booklist->name }} - <a href="{{ route( 'booklist.edit', $booklist->id ) }}">Edit</a> </div>
                 <div class="panel-body">
-                	@if( ! $booklist->books->isEmpty() )                		
+                	@if( ! $booklist->books->isEmpty() ) 
+                		<?php $books = $booklist->books; ?>
+                		{{-- Determine the sort order --}}                		
+                		@if ( request('order') )
+                			<?php                 		
+	                			$books = $booklist->books->sortBy(request('order')); 
+	                		?>
+	                		
+	                		@if ( request('desc') )
+                			<?php                 		
+	                			$books = $booklist->books->sortByDesc(request('order')); 
+	                		?>
+	                		@endif
+                		@endif
+                	
+                		
+                		               		
                 		@if ( request('view') !== 'list' )                		
                 	<table class="table table-striped booklist_table" id="booklist_table_{{ $booklist->id }}">
                 		<thead>
                 			<tr>
                 			@foreach ( $displayableAttributes as $heading )                				
-                				<th>{{ ucwords( str_replace( '_', ' ', $heading ) ) }}</th>                				
+                				<th>
+                					<?php 
+                						$requestParams = [ 'order' => $heading ];
+                					?>
+                						
+                					@if ( request('order') === $heading && ! request('desc') )
+                						<?php 
+                							$requestParams['desc'] = 'true';                							
+                						?>
+                						
+                					@endif
+                					
+                					<a href="{{ request()->url() . '?' . http_build_query($requestParams) }}">
+                							{{ App\Book::splitWords($heading) }}
+                						</a>                					
+                					<span class="sortIndicator">
+                						@if ( request('order') === $heading && ! request('desc'))
+                							▲
+                						@endif
+                						
+                						@if ( request('order') === $heading && request('desc') )
+                							▼
+                						@endif
+                					</span>
+                				</th>                				
                 			@endforeach
                 				<th>Controls</th>
                 			</tr>
                 		</thead>
                 		<tbody>
-                			@foreach ( $booklist->books as $book )
+                			@foreach ( $books as $book )
+                				<tr>
                 				@foreach ( $displayableAttributes as $attribute )
                 				<td id="book_{{ $attribute }}_{{ $book->id }}">
                 					@if ( $attribute === 'title' )
@@ -45,6 +86,7 @@
                 						</form>                						
                 					</div> 
                 				</td>
+                				<tr>
                 			@endforeach
                 		</tbody>
                 	</table>

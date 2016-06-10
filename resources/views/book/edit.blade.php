@@ -13,11 +13,12 @@
 	                			$inputType = 'text';
 	                			$input = 'input';
 	                			
-	                			$attributes = ' maxlength="255" ';
+	                			$attributes = ' required maxlength="255" ';
 	                		?>               			
                 			@if ( $attribute === 'publication_date' )
                 				<?php 
                 					$inputType = 'date';
+                					$attributes = ' required ';
                 				?>
                 			@endif
                 			
@@ -31,6 +32,7 @@
                 			@if ( $attribute === 'rating' )
                 				<?php 
                 					$inputType = 'number';
+                					$attributes = ' min=1 max=5 ';
                 				?>
                 			@endif
                 			

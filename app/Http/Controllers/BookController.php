@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Book;
 use App\Booklist;
 
+use Carbon\Carbon;
+
 class BookController extends Controller
 {
 	/**
@@ -27,7 +29,7 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-    	$booklist = Booklist::findOrFail( $request->route('booklist') )->first(); 
+    	$booklist = Booklist::findOrFail( $request->route('booklist') ); 
     	
         return view('book.create', [
          	'booklist'	=> $booklist,
@@ -43,7 +45,10 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {    	
+    {   
+    	$new_publication_date = Carbon::parse($request->input('publication_date'))->format('Y-m-d');
+    	$request->replace(array_merge($request->all(), ['publication_date' => $new_publication_date]));    	 
+    	
     	$this->validate($request, [
     			'title' => 'required|max:255|string',
     			'author' => 'required|max:255|string',
@@ -54,7 +59,7 @@ class BookController extends Controller
     	]);
     	
     	$booklistid = $request->route('booklist');
-    	$booklist = Booklist::findOrFail($booklistid)->first();
+    	$booklist = Booklist::findOrFail($booklistid);
     	
     	$message = "Added {$request->title} to Reading List {$booklist->name}!";
     	
@@ -78,8 +83,8 @@ class BookController extends Controller
     public function show($booklistid, $bookid)
     {
         return view('book.show', [
-        	'booklist' => Booklist::findOrFail($booklistid)->first(), 
-        	'book' => Book::findOrFail($bookid)->first()
+        	'booklist' => Booklist::findOrFail($booklistid), 
+        	'book' => Book::findOrFail($bookid)
         ]);
     }
 
@@ -92,8 +97,8 @@ class BookController extends Controller
     public function edit($booklistid, $bookid)
     {
         return view('book.edit', [
-        	'booklist' => Booklist::findOrFail($booklistid)->first(),
-        	'book' => Book::findOrFail($bookid)->first(),
+        	'booklist' => Booklist::findOrFail($booklistid),
+        	'book' => Book::findOrFail($bookid),
         	'displayAttributes' => (new Book)->getDisplayable()
         ]);
     }
@@ -107,6 +112,9 @@ class BookController extends Controller
      */
     public function update(Request $request, $booklistid, $bookid)
     {
+    	$new_publication_date = Carbon::parse($request->input('publication_date'))->format('Y-m-d');
+    	$request->replace(array_merge($request->all(), ['publication_date' => $new_publication_date]));
+    	
         $this->validate($request, [
     			'title' => 'required|max:255|string',
     			'author' => 'required|max:255|string',
@@ -115,13 +123,21 @@ class BookController extends Controller
     			'rating' => 'numeric|max:5'
     	]);
     	
-    	$book = Book::findorFail($id)->get();
+    	$book = Book::findorFail($bookid);
     	
     	$message = "{$book->title} was updated!";
     	
-    	$updateData = $request->all();
+    	$book->title = $request->input('title');
+    	$book->author = $request->input('author');
+    	$book->publication_date = $request->input('publication_date');
+    	$book->description = $request->input('description');
+    	$book->rating = $request->input('rating');
     	
-    	$booklist->save($updateData);
+    	$book->save();
+    	
+    	if($request->hasFile('image')){
+    		$book->setImage($request->file('image')->getRealPath(), $request->file('image')->getClientOriginalName());
+    	}
     	
     	return redirect( route('booklist.book.show', [ 'booklist' => $booklistid, 'book' => $bookid ]) )->with('status', [ 'message' => $message ]);
     }
