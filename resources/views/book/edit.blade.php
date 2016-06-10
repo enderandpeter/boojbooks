@@ -32,7 +32,7 @@
                 			@if ( $attribute === 'rating' )
                 				<?php 
                 					$inputType = 'number';
-                					$attributes = ' min=1 max=5 ';
+                					$attributes = ' min=0 max=5 ';
                 				?>
                 			@endif
                 			

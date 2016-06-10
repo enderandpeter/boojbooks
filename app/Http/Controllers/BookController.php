@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Book;
 use App\Booklist;
-
 use Carbon\Carbon;
+
+use Storage;
 
 class BookController extends Controller
 {
@@ -150,13 +151,17 @@ class BookController extends Controller
      */
     public function destroy($booklistid, $bookid)
     {
-        $booklist = Book::findOrFail($bookid);
+        $book = Book::findOrFail($bookid);
     	
     	$message = "{$book->title} was deleted!";        
         
-        $booklist->delete();
+        $book->delete();
         
-        return redirect( route('booklist.book.show', [ 'booklist' => $booklistid, 'book' => $bookid ]) )->with('status', [ 
+        if($book->hasImage()){
+        	Storage::delete($book->getImagePath());
+        }
+        
+        return redirect( route('booklist.show', [ 'booklist' => $booklistid ]) )->with('status', [ 
         		'message' => $message, 
         		'type' => 'warning'
         ]);

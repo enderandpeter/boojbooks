@@ -60,11 +60,44 @@ class Book extends Model
 	/**
 	 * Get the raw image data for this book
 	 * 
+	 * @return resource
 	 */
-	public function getImage(){
-		$imagepath = "images/{$this->id}.{$this->image_ext}";
+	public function getRawImage(){
+		$imagepath = $this->getImagePath();
 		if(Storage::exists($imagepath)){
 			return Storage::get($imagepath);
 		}
+	}
+	
+	/**
+	 * Get the url of the book's image
+	 *
+	 * @return string
+	 */
+	public function getImageUrl(){
+		$imagepath = $this->getImagePath();
+		if(Storage::exists($imagepath)){
+			return Storage::url($imagepath);
+		}
+	}
+	
+	/**
+	 * Whether or not this book's image exists
+	 *
+	 * @return boolean
+	 */
+	public function hasImage(){
+		$imagepath = $this->getImagePath();
+		if(Storage::exists($imagepath)){
+			return Storage::exists($imagepath);
+		}
+	}
+	
+	/**
+	 * Get the raw image data for this book
+	 *
+	 */
+	public function getImagePath(){
+		return $imagepath = "images/{$this->id}.{$this->image_ext}";		
 	}
 }
