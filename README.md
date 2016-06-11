@@ -51,6 +51,8 @@ If deploying in another environment, be sure to do the following:
 
 There are several tests using Laravel's TestCase methods for confirming the user registration operations. You can run them with `phpunit` in the project root.
 
+__Note:__ Be mindful that running the tests will rollback all migrations.
+
 ## Requirements
 
 * Laravel 5.2.*
