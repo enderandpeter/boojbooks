@@ -45,7 +45,7 @@ If deploying in another environment, be sure to do the following:
 * The storage and bootstrap/cache directories must be writeable by the web server process owner
 * If using mod\_proxy to proxy requests to multiple contanairs on separate ports, you must enable the `httpd_can_network_connect` sebool if using SELinux.
 * Use the host OS's public IP for the IP used with the `Proxy` and `ProxyPassReverse` directives.
-* Node.js is required to publish the assets. Run `npm install && npm -g install gulp && gulp` to make this happen. When developing, use the gulp watch command to automatically publish the assets (normalized CSS and JavaScript), everytime the main file is saved. See the tutorial on [Laravel Elixer](https://laravel.com/docs/5.2/elixir) for more information.
+* Node.js is required to publish the frontend assets. Run `npm install && npm -g install gulp && gulp` to make this happen. When developing, use the `gulp watch` or `npm test` command to automatically publish the assets (normalized CSS and JavaScript), everytime the main file is saved. Run `gulp --production` or `npm start` to also minify the CSS and JavaScript. See the tutorial on [Laravel Elixer](https://laravel.com/docs/5.2/elixir) for more information.
 * Be sure to publish an application key to the `APP_KEY` value of the local `.env`. Run the command `php artisan key:generate` to create and assign such a key.
 
 ### Testing
