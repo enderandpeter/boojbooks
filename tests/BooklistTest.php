@@ -187,14 +187,17 @@ class BooklistTest extends TestCase
      */
     public function testEditBooklist(){
     	/*
-    	 * Create a new book
-    	 */
+    	 * Create a new book and user
+    	 */    	
     	$booklist = factory(BookList::class)->create();
+    	$user = User::findOrFail($booklist->user_id)->first();
+    	
     	$oldname = $booklist->name;
     	
     	$newname = str_random(10);
     	
-    	$this->visit( route( 'booklist.edit', $booklist->id ) )
+    	$this->actingAs($user)
+    		->visit( route( 'booklist.edit', $booklist->id ) )
     		->see('Edit ' . $booklist->name)
     		->type($newname, 'name')
     		->press('submit')
