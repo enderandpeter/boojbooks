@@ -16,6 +16,15 @@ body {
     color: #fff;
 }
 
+.navbar-default .navbar-brand{
+	color: #fff;
+}
+
+.navbar-default .navbar-brand:hover:hover {
+    color: #8CCCF9;
+}
+
+
 .panel-default > .panel-heading {
 	background-color: #FFEAEB;
 }
