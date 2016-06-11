@@ -80,7 +80,7 @@ class BooklistController extends Controller
         	'user_id' => $request->user()->id
         ];
         
-        BookList::create($createData);
+        Booklist::create($createData);
         
         return redirect('/')->with('status', [ 'message' => $message ]);
     }
